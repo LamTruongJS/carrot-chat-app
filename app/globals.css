@@ -1,0 +1,256 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --toast-bg: #ffffff;
+    --toast-color: #000000;
+    --toast-border: #e5e7eb;
+}
+
+.dark {
+    --toast-bg: #1f2937;
+    --toast-color: #ffffff;
+    --toast-border: #374151;
+}
+
+@layer base {
+    body {
+        @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100;
+    }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-gray-800 rounded-full;
+    margin: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-gradient-to-b from-carrot-400 to-carrot-600 dark:from-carrot-600 dark:to-carrot-800 rounded-full;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    @apply bg-gradient-to-b from-carrot-500 to-carrot-700 dark:from-carrot-500 dark:to-carrot-700;
+}
+
+/* Firefox scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #FF6B35 #f3f4f6;
+}
+
+.dark * {
+    scrollbar-color: #ea580c #1f2937;
+}
+
+/* Markdown styles - Enhanced */
+.prose {
+    @apply text-gray-800 dark:text-gray-100 text-[14.5px] leading-[1.7];
+    max-width: none !important;
+}
+
+.prose p {
+    @apply my-2.5 leading-7;
+}
+
+/* Lists with proper bullets/numbers */
+.prose ul {
+    @apply my-3 pl-6 space-y-2;
+    list-style-type: disc;
+}
+
+.prose ol {
+    @apply my-3 pl-6 space-y-2;
+    list-style-type: decimal;
+}
+
+.prose ul ul {
+    @apply mt-2 mb-2 pl-5;
+    list-style-type: circle;
+}
+
+.prose ol ol {
+    @apply mt-2 mb-2 pl-5;
+    list-style-type: lower-alpha;
+}
+
+.prose li {
+    @apply my-1.5 pl-1;
+    display: list-item;
+}
+
+.prose li>p {
+    @apply my-1;
+}
+
+.prose li::marker {
+    @apply text-carrot-500 dark:text-carrot-400;
+}
+
+/* Headings */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+    @apply font-extrabold mt-6 mb-3 text-gray-900 dark:text-gray-50 tracking-tight;
+}
+
+.prose h1 {
+    @apply text-2xl border-b-2 border-carrot-300 dark:border-carrot-700 pb-2.5;
+}
+
+.prose h2 {
+    @apply text-xl border-b-2 border-carrot-200 dark:border-carrot-800 pb-2;
+}
+
+.prose h3 {
+    @apply text-lg border-b border-gray-200 dark:border-gray-700 pb-1.5;
+}
+
+.prose h4 {
+    @apply text-base font-bold;
+}
+
+/* Code blocks */
+.prose pre {
+    @apply rounded-xl my-4 overflow-x-auto shadow-md;
+}
+
+.prose code {
+    @apply text-[13px] font-mono;
+}
+
+.prose :not(pre)>code {
+    @apply bg-carrot-100/60 dark:bg-gray-700/80 text-carrot-700 dark:text-carrot-300 px-2 py-0.5 rounded-md text-[13px] font-semibold border border-carrot-200/40 dark:border-gray-600/40;
+}
+
+/* Blockquotes */
+.prose blockquote {
+    @apply border-l-4 border-carrot-500 pl-4 italic my-4 text-gray-700 dark:text-gray-300 bg-gradient-to-r from-carrot-50 to-transparent dark:from-carrot-900/20 dark:to-transparent py-3 rounded-r-lg shadow-sm;
+}
+
+/* Links */
+.prose a {
+    @apply text-carrot-600 dark:text-carrot-400 hover:text-carrot-700 dark:hover:text-carrot-300 underline decoration-carrot-300 dark:decoration-carrot-600 underline-offset-2 hover:decoration-carrot-500 dark:hover:decoration-carrot-400 font-medium transition-colors;
+}
+
+/* Text formatting */
+.prose strong {
+    @apply font-bold text-gray-900 dark:text-white;
+}
+
+.prose em {
+    @apply italic text-gray-700 dark:text-gray-300;
+}
+
+/* Horizontal rule */
+.prose hr {
+    @apply border-gray-300 dark:border-gray-600 my-4;
+}
+
+/* Tables */
+.prose table {
+    @apply w-full my-4 border-collapse rounded-lg overflow-hidden shadow-sm;
+}
+
+.prose th {
+    @apply bg-gradient-to-br from-carrot-100 to-carrot-50 dark:from-carrot-900/30 dark:to-carrot-900/20 font-bold p-3 text-left border border-carrot-200 dark:border-gray-600 text-gray-900 dark:text-gray-50;
+}
+
+.prose td {
+    @apply p-3 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50;
+}
+
+.prose tbody tr:hover td {
+    @apply bg-carrot-50/30 dark:bg-carrot-900/10 transition-colors;
+}
+
+/* Task lists */
+.prose input[type="checkbox"] {
+    @apply mr-2;
+}
+
+/* Text alignment for user messages */
+.prose.text-right p,
+.prose.text-right h1,
+.prose.text-right h2,
+.prose.text-right h3,
+.prose.text-right h4,
+.prose.text-right blockquote {
+    text-align: right;
+}
+
+.prose.text-right ul,
+.prose.text-right ol {
+    text-align: right;
+    list-style-position: inside;
+}
+
+/* Animation utilities */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(10px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+}
+
+/* Loading skeleton */
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.skeleton {
+    animation: shimmer 2s infinite;
+    background: linear-gradient(to right,
+            #f0f0f0 0%,
+            #e0e0e0 20%,
+            #f0f0f0 40%,
+            #f0f0f0 100%);
+    background-size: 1000px 100%;
+}
+
+.dark .skeleton {
+    background: linear-gradient(to right,
+            #2d3748 0%,
+            #1a202c 20%,
+            #2d3748 40%,
+            #2d3748 100%);
+    background-size: 1000px 100%;
+}

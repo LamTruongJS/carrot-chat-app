@@ -1,0 +1,36 @@
+====================================================================
+IMPORTANT: ENVIRONMENT VARIABLE SETUP REQUIRED
+====================================================================
+
+You must create a .env.local file before running the application!
+
+STEPS TO CREATE .env.local:
+
+1. Create a new file named ".env.local" in the root directory
+   (same folder as package.json)
+
+2. Add the following content to .env.local:
+
+ANTHROPIC_API_KEY=key
+
+3. Save the file
+
+4. Verify it's in .gitignore (it should be!)
+
+5. Run: npm run dev
+
+====================================================================
+
+SECURITY WARNING:
+- NEVER commit .env.local to git
+- NEVER share your API key publicly
+- .env.local is already in .gitignore for your safety
+
+====================================================================
+
+If you're deploying to Vercel or another platform:
+- Add ANTHROPIC_API_KEY as an environment variable in the platform's dashboard
+- Use the same value as above
+
+====================================================================
+
