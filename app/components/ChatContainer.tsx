@@ -305,24 +305,51 @@ export default function ChatContainer({
                         }}
                     >
                         <div className="max-w-4xl mx-auto space-y-4">
-                            <AnimatePresence>
+                            <AnimatePresence mode="wait">
                                 {messages.length === 0 && !isLoading && (
                                     <motion.div
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -20 }}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0, scale: 0.95 }}
+                                        transition={{ duration: 0.4 }}
                                         className="flex flex-col items-center justify-center min-h-[280px] text-center"
                                     >
-                                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-carrot-400 to-carrot-600 text-white mb-5 shadow-xl">
+                                        <motion.div
+                                            className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-carrot-400 to-carrot-600 text-white mb-5 shadow-xl"
+                                            initial={{ scale: 0, rotate: -180 }}
+                                            animate={{ scale: 1, rotate: 0 }}
+                                            transition={{
+                                                type: "spring",
+                                                stiffness: 260,
+                                                damping: 20,
+                                                delay: 0.1
+                                            }}
+                                        >
                                             <MessageSquare className="w-8 h-8" />
-                                        </div>
-                                        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">
+                                        </motion.div>
+                                        <motion.h2
+                                            className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2"
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: 0.2, duration: 0.4 }}
+                                        >
                                             Chào mừng đến Carrot Chat
-                                        </h2>
-                                        <p className="text-gray-600 dark:text-gray-400 text-sm max-w-md mb-6">
+                                        </motion.h2>
+                                        <motion.p
+                                            className="text-gray-600 dark:text-gray-400 text-sm max-w-md mb-6"
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: 0.3, duration: 0.4 }}
+                                        >
                                             Bắt đầu cuộc trò chuyện và để AI hỗ trợ bạn
-                                        </p>
-                                        <SuggestedPrompts onSelect={sendMessage} disabled={isLoading} />
+                                        </motion.p>
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: 0.4, duration: 0.4 }}
+                                        >
+                                            <SuggestedPrompts onSelect={sendMessage} disabled={isLoading} />
+                                        </motion.div>
                                     </motion.div>
                                 )}
 
@@ -345,18 +372,47 @@ export default function ChatContainer({
 
                             {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
                                 <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    className="flex gap-3 p-4 rounded-xl bg-white dark:bg-gray-800 mr-auto max-w-[85%] border border-gray-200 dark:border-gray-700 shadow-sm"
+                                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.95 }}
+                                    transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                                    className="flex gap-3 p-4 rounded-xl bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-800 dark:to-gray-800/80 mr-auto max-w-[85%] border border-gray-200/80 dark:border-gray-700/50 shadow-lg"
                                 >
-                                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white dark:bg-gray-100 border-2 border-carrot-500 flex items-center justify-center shadow-sm">
-                                        <span className="text-base">🥕</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <Loader2 className="w-4 h-4 animate-spin text-carrot-500" />
-                                        <span className="text-[13px] text-gray-600 dark:text-gray-400">
-                                            Thinking...
+                                    <motion.div
+                                        className="flex-shrink-0 w-10 h-10 rounded-full bg-white dark:bg-gray-100 border-2 border-carrot-500 flex items-center justify-center shadow-md"
+                                        animate={{
+                                            scale: [1, 1.1, 1],
+                                            rotate: [0, 5, -5, 0]
+                                        }}
+                                        transition={{
+                                            duration: 2,
+                                            repeat: Infinity,
+                                            ease: "easeInOut"
+                                        }}
+                                    >
+                                        <span className="text-xl">🥕</span>
+                                    </motion.div>
+                                    <div className="flex items-center gap-2 py-1">
+                                        <span className="text-[13px] text-gray-600 dark:text-gray-400 font-medium">
+                                            Đang suy nghĩ
                                         </span>
+                                        <div className="flex gap-1">
+                                            <motion.span
+                                                className="w-1.5 h-1.5 bg-carrot-500 rounded-full"
+                                                animate={{ y: [0, -6, 0] }}
+                                                transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
+                                            />
+                                            <motion.span
+                                                className="w-1.5 h-1.5 bg-carrot-500 rounded-full"
+                                                animate={{ y: [0, -6, 0] }}
+                                                transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }}
+                                            />
+                                            <motion.span
+                                                className="w-1.5 h-1.5 bg-carrot-500 rounded-full"
+                                                animate={{ y: [0, -6, 0] }}
+                                                transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }}
+                                            />
+                                        </div>
                                     </div>
                                 </motion.div>
                             )}

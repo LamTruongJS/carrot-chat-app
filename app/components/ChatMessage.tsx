@@ -3,7 +3,7 @@
 import { Message } from "@/types/chat";
 import { motion, AnimatePresence } from "framer-motion";
 import { User, Copy, Check, RefreshCw, ThumbsUp, ThumbsDown } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -22,7 +22,19 @@ export default function ChatMessage({ message, onRegenerate, onReaction, disable
     const [reaction, setReaction] = useState<"up" | "down" | null>(null);
     const [isHovered, setIsHovered] = useState(false);
     const [hasAnimated, setHasAnimated] = useState(false);
+    const [isStreaming, setIsStreaming] = useState(false);
     const isUser = message.role === "user";
+    const previousContentLength = useRef(message.content.length);
+
+    // Detect if message is being streamed (content is growing)
+    useEffect(() => {
+        if (!isUser && message.content.length > previousContentLength.current) {
+            setIsStreaming(true);
+            const timer = setTimeout(() => setIsStreaming(false), 300);
+            previousContentLength.current = message.content.length;
+            return () => clearTimeout(timer);
+        }
+    }, [message.content, isUser]);
 
     const copyToClipboard = async () => {
         try {
@@ -147,9 +159,13 @@ export default function ChatMessage({ message, onRegenerate, onReaction, disable
                 onMouseLeave={() => setIsHovered(false)}
             >
                 <motion.div
-                    initial={hasAnimated ? false : { opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: hasAnimated ? 0 : 0.3 }}
+                    initial={hasAnimated ? false : { opacity: 0, y: 20, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{
+                        duration: hasAnimated ? 0 : 0.4,
+                        ease: [0.4, 0, 0.2, 1],
+                        scale: { type: "spring", stiffness: 300, damping: 25 }
+                    }}
                     onAnimationComplete={() => setHasAnimated(true)}
                     className={`inline-flex gap-3 px-4 py-0 pt-3 rounded-2xl ${isUser ? "flex-row-reverse" : "flex-row"
                         } ${isUser
@@ -157,14 +173,23 @@ export default function ChatMessage({ message, onRegenerate, onReaction, disable
                             : "bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-800 dark:to-gray-800/80 border border-gray-200/80 dark:border-gray-700/50 backdrop-blur-sm"
                         } shadow-lg shadow-gray-200/50 dark:shadow-gray-900/30 hover:shadow-xl hover:shadow-gray-300/60 dark:hover:shadow-gray-900/50 transition-all duration-300`}
                 >
-                    <div
+                    <motion.div
+                        initial={{ scale: 0, rotate: -180 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        transition={{
+                            delay: hasAnimated ? 0 : 0.1,
+                            duration: 0.5,
+                            type: "spring",
+                            stiffness: 260,
+                            damping: 20
+                        }}
                         className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-md ${isUser
                             ? "bg-gradient-to-br from-carrot-500 to-carrot-600 text-white"
                             : "bg-white dark:bg-gray-100 border-2 border-carrot-500"
-                            }`}
+                            } ${isStreaming && !isUser ? 'animate-pulse ring-2 ring-carrot-400 ring-opacity-50' : ''}`}
                     >
                         {isUser ? <User className="w-5 h-5" /> : <span className="text-xl">🥕</span>}
-                    </div>
+                    </motion.div>
 
                     <div className="flex-1 min-w-0">
                         <div className={`flex items-center mb-2 ${isUser ? 'justify-end' : 'justify-between'}`}>
@@ -230,11 +255,24 @@ export default function ChatMessage({ message, onRegenerate, onReaction, disable
                             )}
                         </div>
 
-                        <div className={`prose dark:prose-invert max-w-none ${isUser ? 'text-right' : ''}`} style={{ contain: "content" }}>
+                        <motion.div
+                            className={`prose dark:prose-invert max-w-none ${isUser ? 'text-right' : ''}`}
+                            style={{ contain: "content" }}
+                            initial={hasAnimated ? false : { opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: hasAnimated ? 0 : 0.2, duration: 0.4 }}
+                        >
                             <ReactMarkdown components={markdownComponents}>
                                 {message.content}
                             </ReactMarkdown>
-                        </div>
+                            {isStreaming && !isUser && (
+                                <motion.span
+                                    className="inline-block w-1.5 h-4 bg-carrot-500 ml-1"
+                                    animate={{ opacity: [1, 0.3, 1] }}
+                                    transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
+                                />
+                            )}
+                        </motion.div>
                     </div>
                 </motion.div>
 
