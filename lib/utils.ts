@@ -8,21 +8,21 @@ export function cn(...inputs: ClassValue[]) {
 export function formatTimestamp(timestamp: number): string {
     const date = new Date(timestamp);
     const now = new Date();
-    const diff = now.getTime() - date.getTime();
-    const seconds = Math.floor(diff / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
+    const isToday = date.toDateString() === now.toDateString();
 
-    if (days > 0) {
-        return date.toLocaleDateString();
+    // Format giờ:phút (24h)
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const timeString = `${hours}:${minutes}`;
+
+    // Nếu là hôm nay, chỉ hiển thị giờ:phút
+    if (isToday) {
+        return timeString;
     }
-    if (hours > 0) {
-        return `${hours}h ago`;
-    }
-    if (minutes > 0) {
-        return `${minutes}m ago`;
-    }
-    return "Just now";
+
+    // Nếu không phải hôm nay, hiển thị ngày + giờ:phút
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    return `${day}/${month} ${timeString}`;
 }
 

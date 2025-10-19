@@ -54,13 +54,12 @@ export default function Sidebar({
 
     const formatDate = (timestamp: number) => {
         const date = new Date(timestamp);
-        const now = new Date();
-        const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
 
-        if (diffDays === 0) return "Hôm nay";
-        if (diffDays === 1) return "Hôm qua";
-        if (diffDays < 7) return `${diffDays} ngày trước`;
-        return date.toLocaleDateString("vi-VN");
+        return `${day}/${month} ${hours}:${minutes}`;
     };
 
     return (
